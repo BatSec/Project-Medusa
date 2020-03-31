@@ -1,12 +1,10 @@
 import vlc
-import time
-import io
 import os
 import config
 import shutil
 from tkinter import *
-from tinytag import TinyTag, TinyTagException
-from PIL import Image, ImageTk, UnidentifiedImageError
+from tinytag import TinyTag
+from PIL import Image, ImageTk
 
 config.i = 0
 config.mname = ''
@@ -14,9 +12,10 @@ config.song = []
 config.goto = 0
 config.tmp = 0
 config.playing = 0
+config.path = "/home/lowkey/Music/"
 
 
-for root, dirs, files, in os.walk("Music"):
+for root, dirs, files, in os.walk(config.path):
     for k in files:
         config.song.append(k)
 
@@ -27,8 +26,8 @@ def main():
     except IndexError:
         print("No songs Found!!")
         exit()
-    config.sound_file = vlc.MediaPlayer("Music" + "/" + config.csong)
-    temp_track = TinyTag.get("Music" + "/" + config.csong, image=True)
+    config.sound_file = vlc.MediaPlayer(config.path + config.csong)
+    temp_track = TinyTag.get(config.path + config.csong, image=True)
     title = temp_track.title
     if title is None:
         title = config.song[config.tmp]
