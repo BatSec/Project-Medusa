@@ -2,6 +2,7 @@ import vlc
 import os
 import config
 import shutil
+import tkinter.font as font
 from tkinter import *
 from tinytag import TinyTag, TinyTagException
 from PIL import Image, ImageTk
@@ -78,8 +79,7 @@ def prev(sound_file):
 
 
 def refresh(var):
-    global img
-    global playimg
+    global img, playimg
     img = Image.open("temp.jpg")
     img = img.resize((300, 300), Image.ANTIALIAS)
     img.save("temp.jpg")
@@ -100,6 +100,7 @@ def refresh(var):
 main()
 config.goto = 1
 root = Tk()
+myFont = font.Font(size=16)
 root.title("Medusa")
 root.geometry("420x500")
 playimg = PhotoImage(file="play.png")
@@ -114,7 +115,7 @@ BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i,c
 BtNext = Button(root, border='0', image=forward, command=lambda: next(config.sound_file))
 BtPrev = Button(root, border='0', image=back, command=lambda: prev(config.sound_file))
 BtTrev = Button(root, text="Show PlayList", command= lambda: os.system('python3 treverse_songs.py'))
-cname = Label(root, text=config.mname)
+cname = Label(root, text=config.mname, font=myFont)
 space = Label(root, text=' ')
 space2 = Label(root, text=' ')
 space3 = Label(root, text=' ')
