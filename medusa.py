@@ -44,7 +44,6 @@ def main():
 
 
 def play(check, sound_file):
-    refresh(0)
     if config.i == 0:
         sound_file.play()
         config.i = 1
@@ -54,6 +53,7 @@ def play(check, sound_file):
         config.i = 0
         print("Paused")
         config.playing = 0
+    refresh(0)
 
 
 def next(sound_file):
@@ -86,11 +86,14 @@ def refresh(var):
     img = ImageTk.PhotoImage(Image.open("temp.jpg"))
     lpic.config(image=img)
     cname.config(text=config.mname)
-    if config.playing != 0 or var == 1:
+    if var == 1:
         playimg = PhotoImage(file="play.png")
         BtPlay.config(image=playimg)
-    else:
+    elif config.playing == 1:
         playimg = PhotoImage(file="pause.png")
+        BtPlay.config(image=playimg)
+    else:
+        playimg = PhotoImage(file="play.png")
         BtPlay.config(image=playimg)
 
 
@@ -100,14 +103,16 @@ root = Tk()
 root.title("Medusa")
 root.geometry("420x500")
 playimg = PhotoImage(file="play.png")
+forward = PhotoImage(file="forward.png")
+back = PhotoImage(file="back.png")
 img = Image.open("temp.jpg")
 img = img.resize((300, 300), Image.ANTIALIAS)
 img.save("temp.jpg")
 img = ImageTk.PhotoImage(Image.open("temp.jpg"))
 lpic = Label(root, image=img)
 BtPlay = Button(root, image=playimg, command=lambda: play(config.i,config.sound_file))
-BtNext = Button(root, text="Next", command=lambda: next(config.sound_file))
-BtPrev = Button(root, text="Prev", command=lambda: prev(config.sound_file))
+BtNext = Button(root, image=forward, command=lambda: next(config.sound_file))
+BtPrev = Button(root, image=back, command=lambda: prev(config.sound_file))
 BtTrev = Button(root, text="Show PlayList", command= lambda: os.system('python3 treverse_songs.py'))
 cname = Label(root, text=config.mname)
 space = Label(root, text=' ')
