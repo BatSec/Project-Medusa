@@ -3,7 +3,7 @@ import os
 import config
 import shutil
 from tkinter import *
-from tinytag import TinyTag
+from tinytag import TinyTag, TinyTagException
 from PIL import Image, ImageTk
 
 config.i = 0
@@ -16,8 +16,8 @@ config.path = "/home/lowkey/Music/"
 
 
 for root, dirs, files, in os.walk(config.path):
-    for k in files:
-        config.song.append(k)
+    for name in files:
+            config.song.append(name)
 
 
 def main():
@@ -31,6 +31,8 @@ def main():
     title = temp_track.title
     if title is None:
         title = config.song[config.tmp]
+    elif len(title) > 20:
+        title = title[:20] + "..."
     print("Now Playing:", title)
     pic = temp_track.get_image()
     if pic is not None:
@@ -42,6 +44,7 @@ def main():
 
 
 def play(check, sound_file):
+    refresh(0)
     if config.i == 0:
         sound_file.play()
         config.i = 1
@@ -60,7 +63,7 @@ def next(sound_file):
     if config.playing == 1:
         sound_file.pause()
         config.i = 0
-    refresh()
+    refresh(1)
 
 
 def prev(sound_file):
@@ -71,17 +74,24 @@ def prev(sound_file):
         if config.playing == 1:
             sound_file.pause()
             config.i = 0
-        refresh()
+        refresh(1)
 
 
-def refresh():
+def refresh(var):
     global img
+    global playimg
     img = Image.open("temp.jpg")
     img = img.resize((300, 300), Image.ANTIALIAS)
     img.save("temp.jpg")
     img = ImageTk.PhotoImage(Image.open("temp.jpg"))
     lpic.config(image=img)
     cname.config(text=config.mname)
+    if config.playing != 0 or var == 1:
+        playimg = PhotoImage(file="play.png")
+        BtPlay.config(image=playimg)
+    else:
+        playimg = PhotoImage(file="pause.png")
+        BtPlay.config(image=playimg)
 
 
 main()

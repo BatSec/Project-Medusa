@@ -3,7 +3,7 @@ from tinytag import TinyTag, TinyTagException
 
 tracks = []
 
-for root, dirs, files, in os.walk("/home/lowkey/Documents/Programs/Python/Project Medusa/Music"):
+for root, dirs, files, in os.walk("/home/lowkey/Music"):
     for name in files:
         if name.endswith((".mp3",".m4a",".flac",".alac")):
             tracks.append(name)
