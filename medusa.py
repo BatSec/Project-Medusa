@@ -2,18 +2,22 @@ import vlc
 import os
 import config
 import shutil
+import time
 import tkinter.font as font
 from tkinter import *
+import tkinter.ttk as ttk
 from tinytag import TinyTag, TinyTagException
 from PIL import Image, ImageTk
 
 config.i = 0
 config.mname = ''
 config.song = []
-config.goto = 0
+config.slen = 0
 config.tmp = 0
 config.playing = 0
 config.path = "/home/lowkey/Music/"
+config.isload = 0
+config.loadval = 0
 
 
 for root, dirs, files, in os.walk(config.path):
@@ -29,6 +33,10 @@ def main():
         exit()
     config.sound_file = vlc.MediaPlayer(config.path + config.csong)
     temp_track = TinyTag.get(config.path + config.csong, image=True)
+    if temp_track.duration is not None:
+        config.slen = int(temp_track.duration)
+    else:
+        config.slen = 0
     title = temp_track.title
     if title is None:
         title = config.song[config.tmp]
@@ -49,33 +57,42 @@ def play(check, sound_file):
         sound_file.play()
         config.i = 1
         config.playing = 1
+        config.isload = 0
+        val = config.slen*1000
+        BtPlay.after(val, songEnd)
     else:
         sound_file.pause()
         config.i = 0
         print("Paused")
         config.playing = 0
+        config.isload = 1
     refresh(0)
+    loading()
 
 
 def next(sound_file):
     config.tmp += 1
-    config.goto = 0
     main()
     if config.playing == 1:
         sound_file.pause()
         config.i = 0
     refresh(1)
+    config.loadval = 0
+    config.isload = 2
+    loading()
 
 
 def prev(sound_file):
     if config.tmp != 0:
         config.tmp -= 1
-        config.goto = 0
         main()
         if config.playing == 1:
             sound_file.pause()
             config.i = 0
         refresh(1)
+        config.loadval = 0
+        config.isload = 2
+        loading()
 
 
 def refresh(var):
@@ -97,8 +114,30 @@ def refresh(var):
         BtPlay.config(image=playimg)
 
 
+def songEnd():
+    config.isload = 3
+    loading()
+
+
+def loading():
+    if config.isload == 0:
+        i = 0
+        for i in range(0, config.slen):
+            progress.config(value = config.loadval)
+            progress.start()
+    elif config.isload == 2:
+        progress.stop()
+        progress.config(value=0)
+    elif config.isload == 3:
+        progress.stop()
+        progress.config(value = (config.slen*20))
+    else:
+        config.loadval = progress["value"]
+        progress.stop()
+        progress.config(value=config.loadval)
+
+
 main()
-config.goto = 1
 root = Tk()
 myFont = font.Font(size=16)
 root.title("Medusa")
@@ -115,18 +154,21 @@ img = img.resize((300, 300), Image.ANTIALIAS)
 img.save("temp.jpg")
 img = ImageTk.PhotoImage(Image.open("temp.jpg"))
 lpic = Label(root, image=img)
+s = ttk.Style()
+s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
+progress = ttk.Progressbar(root, style="red.Horizontal.TProgressbar", orient = HORIZONTAL, length = 400, maximum = (config.slen*20), mode = 'determinate', value=0)
 BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i,config.sound_file))
 BtNext = Button(root, border='0', image=forward, command=lambda: next(config.sound_file))
 BtPrev = Button(root, border='0', image=back, command=lambda: prev(config.sound_file))
 BtTrev = Button(root, border='0', image=search ,command= lambda: os.system('python3 treverse_songs.py'))
 BtRef = Button(root, border='0', image=ref)
 cname = Label(root, text=config.mname, font=myFont)
-# MyButton1.place(relx=0.5, rely=0.5, anchor="c")
 lpic.place(relx=0.5, rely=0.0, anchor="n")
-cname.place(relx=0.5, rely=0.75, anchor="c")
+cname.place(relx=0.5, rely=0.65, anchor="c")
 BtPlay.place(relx=0.5, rely=0.85, anchor="c")
 BtPrev.place(relx=0.25, rely=0.85, anchor="c")
 BtNext.place(relx=0.75, rely=0.85, anchor="c")
 BtTrev.place(relx=0.1, rely=0.85, anchor="c")
 BtRef.place(relx=0.9, rely=0.85, anchor="c")
+progress.place(relx=0.5, rely=0.725, anchor="c", height=7)
 root.mainloop()
