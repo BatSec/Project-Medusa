@@ -54,14 +54,14 @@ def main():
 
 def play(check, sound_file):
     if config.i == 0:
-        sound_file.play()
+        config.sound_file.play()
         config.i = 1
         config.playing = 1
         config.isload = 0
         val = config.slen*1000
         BtPlay.after(val, songEnd)
     else:
-        sound_file.pause()
+        config.sound_file.pause()
         config.i = 0
         print("Paused")
         config.playing = 0
@@ -137,6 +137,40 @@ def loading():
         progress.config(value=config.loadval)
 
 
+def uplist(tmp):
+    config.isload = 2
+    config.loadval = 0
+    loading()
+    global index, value
+    index = config.kaja.curselection()
+    value = config.kaja.get(index)
+    config.tmp = index[0]
+    main()
+    config.i = 0
+    play(0, config.sound_file)
+    config.root1.destroy()
+
+
+def list():
+    if config.playing == 1:
+        config.sound_file.pause()
+        refresh(1)
+    tmp = 1
+    config.root1 = Tk()
+    config.kaja = Listbox(config.root1)
+    config.root1.geometry("300x500")
+
+    for i in config.song:
+        if len(i) > 20:
+            i = i[:20] + "..."
+        config.kaja.insert(tmp, "  "+i)
+        tmp += 1
+
+    config.kaja.place(relx=0.5, rely=0.5, anchor="c", height="500", width="300")
+    config.kaja.bind('<<ListboxSelect>>', uplist)
+    config.root1.mainloop()
+
+
 main()
 root = Tk()
 myFont = font.Font(size=16)
@@ -160,7 +194,7 @@ progress = ttk.Progressbar(root, style="red.Horizontal.TProgressbar", orient = H
 BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i,config.sound_file))
 BtNext = Button(root, border='0', image=forward, command=lambda: next(config.sound_file))
 BtPrev = Button(root, border='0', image=back, command=lambda: prev(config.sound_file))
-BtTrev = Button(root, border='0', image=search ,command= lambda: os.system('python3 treverse_songs.py'))
+BtTrev = Button(root, border='0', image=search ,command= lambda: list())
 BtRef = Button(root, border='0', image=ref)
 cname = Label(root, text=config.mname, font=myFont)
 lpic.place(relx=0.5, rely=0.0, anchor="n")
