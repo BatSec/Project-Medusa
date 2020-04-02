@@ -149,12 +149,15 @@ def uplist(tmp):
     config.i = 0
     play(0, config.sound_file)
     config.root1.destroy()
+    BtPlay.config(state="normal")
 
 
 def list():
+    BtPlay.config(state="disabled")
     if config.playing == 1:
         config.sound_file.pause()
         refresh(1)
+    config.playing = 0
     tmp = 1
     config.root1 = Tk()
     myFont = font.Font(size=16)
