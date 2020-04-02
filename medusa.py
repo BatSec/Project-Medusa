@@ -157,11 +157,12 @@ def list():
         refresh(1)
     tmp = 1
     config.root1 = Tk()
-    config.kaja = Listbox(config.root1)
+    myFont = font.Font(size=16)
+    config.kaja = Listbox(config.root1, font=myFont)
     config.root1.geometry("300x500")
 
     for i in config.song:
-        if len(i) > 20:
+        if len(i) > 30:
             i = i[:20] + "..."
         config.kaja.insert(tmp, "  "+i)
         tmp += 1
@@ -169,6 +170,15 @@ def list():
     config.kaja.place(relx=0.5, rely=0.5, anchor="c", height="500", width="300")
     config.kaja.bind('<<ListboxSelect>>', uplist)
     config.root1.mainloop()
+
+
+def again():
+    config.sound_file.stop()
+    config.sound_file.play()
+    config.playing = 1
+    refresh(0)
+    config.isloading = 2
+    loading()
 
 
 main()
@@ -195,7 +205,7 @@ BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i,c
 BtNext = Button(root, border='0', image=forward, command=lambda: next(config.sound_file))
 BtPrev = Button(root, border='0', image=back, command=lambda: prev(config.sound_file))
 BtTrev = Button(root, border='0', image=search ,command= lambda: list())
-BtRef = Button(root, border='0', image=ref)
+BtRef = Button(root, border='0', image=ref, command= lambda: again())
 cname = Label(root, text=config.mname, font=myFont)
 lpic.place(relx=0.5, rely=0.0, anchor="n")
 cname.place(relx=0.5, rely=0.65, anchor="c")
