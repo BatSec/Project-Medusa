@@ -15,8 +15,8 @@ Please make sure all the following requirements are satisfied or else the progra
 ## Installing Requirements
 Run the following commands in your terminal to satisfy the requirements
 
-     sudo pip3 install python-vlc
-     sudo pip3 install tinytag
-     sudo pip3 install mysql-connector
-     sudo pip3 install pillow
-     sudo apt install python3-pil.imagetk
+     sudo pip install -r requirements.txt
+		  
+		    or 
+
+     sudo pip3 install -r requirements.txt
