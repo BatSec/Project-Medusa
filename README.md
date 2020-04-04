@@ -7,7 +7,6 @@ Please make sure all the following requirements are satisfied or else the progra
 
       * python3
       * vlc runtime
-      * time
       * tkinter
       * tinytag
       * PIL
