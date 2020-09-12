@@ -2,6 +2,12 @@
 # Project-Medusa 
 Medusa is a cross-platform music player based on python3.
 
+![](icon.png)
+
+# Design
+
+![](medusa.png)
+
 ## Requirements
 Please make sure all the following requirements are satisfied or else the program might crash
 
