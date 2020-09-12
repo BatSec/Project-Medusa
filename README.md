@@ -6,7 +6,9 @@ Medusa is a cross-platform music player based on python3.
 
 # Design
 
-![](medusa.png)
+<p align="center">
+  <img src="https://github.com/BatSec/Project-Medusa/blob/master/medusa.png">
+</p>
 
 ## Requirements
 Please make sure all the following requirements are satisfied or else the program might crash
