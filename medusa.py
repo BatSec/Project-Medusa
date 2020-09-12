@@ -2,20 +2,20 @@ import vlc
 import os
 import config
 import shutil
-import time
 import tkinter.font as font
 from tkinter import *
 import tkinter.ttk as ttk
 from tinytag import TinyTag, TinyTagException
 from PIL import Image, ImageTk
 
+username = os.getlogin()
 config.i = 0
 config.mname = ''
 config.song = []
 config.slen = 0
 config.tmp = 0
 config.playing = 0
-config.path = "/home/lowkey/Music/"
+config.path = "/home/"+username+"/Music/"
 config.isload = 0
 config.loadval = 0
 
