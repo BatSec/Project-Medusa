@@ -48,7 +48,7 @@ def main():
         f1 = open("temp.jpg", "wb")
         f1.write(pic)
     else:
-        shutil.copy("default.jpg", "temp.jpg")
+        shutil.copy("assets/default.jpg", "temp.jpg")
     config.mname = title
 
 
@@ -104,13 +104,13 @@ def refresh(var):
     lpic.config(image=img)
     cname.config(text=config.mname)
     if var == 1:
-        playimg = PhotoImage(file="play.png")
+        playimg = PhotoImage(file="assets/play.png")
         BtPlay.config(image=playimg)
     elif config.playing == 1:
-        playimg = PhotoImage(file="pause.png")
+        playimg = PhotoImage(file="assets/pause.png")
         BtPlay.config(image=playimg)
     else:
-        playimg = PhotoImage(file="play.png")
+        playimg = PhotoImage(file="assets/play.png")
         BtPlay.config(image=playimg)
 
 
@@ -189,13 +189,13 @@ root = Tk()
 myFont = font.Font(size=16)
 root.title("Medusa")
 root.geometry("420x500")
-icon = PhotoImage(file = 'icon.png') 
+icon = PhotoImage(file = 'assets/icon.png')
 root.iconphoto(False, icon)
-playimg = PhotoImage(file="play.png")
-forward = PhotoImage(file="forward.png")
-back = PhotoImage(file="back.png")
-search = PhotoImage(file="search.png")
-ref = PhotoImage(file="refresh.png")
+playimg = PhotoImage(file="assets/play.png")
+forward = PhotoImage(file="assets/forward.png")
+back = PhotoImage(file="assets/back.png")
+search = PhotoImage(file="assets/search.png")
+ref = PhotoImage(file="assets/refresh.png")
 img = Image.open("temp.jpg")
 img = img.resize((300, 300), Image.ANTIALIAS)
 img.save("temp.jpg")
