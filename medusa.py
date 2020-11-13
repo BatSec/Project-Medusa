@@ -2,10 +2,10 @@ import vlc
 import os
 import config
 import shutil
-import tkinter.font as font
-from tkinter import *
+from tkinter import PhotoImage, Listbox, Button, Tk, Label
 import tkinter.ttk as ttk
-from tinytag import TinyTag, TinyTagException
+import tkinter.font as font
+from tinytag import TinyTag
 from PIL import Image, ImageTk
 
 username = os.getlogin()
@@ -22,7 +22,7 @@ config.loadval = 0
 
 for root, dirs, files, in os.walk(config.path):
     for name in files:
-            config.song.append(name)
+        config.song.append(name)
 
 
 def main():
@@ -79,6 +79,7 @@ def next(sound_file):
     refresh(1)
     config.loadval = 0
     config.isload = 2
+    play(0, config.sound_file)
     loading()
 
 
@@ -92,6 +93,7 @@ def prev(sound_file):
         refresh(1)
         config.loadval = 0
         config.isload = 2
+        play(0, config.sound_file)
         loading()
 
 
@@ -123,14 +125,14 @@ def loading():
     if config.isload == 0:
         i = 0
         for i in range(0, config.slen):
-            progress.config(value = config.loadval)
+            progress.config(value=config.loadval)
             progress.start()
     elif config.isload == 2:
         progress.stop()
         progress.config(value=0)
     elif config.isload == 3:
         progress.stop()
-        progress.config(value = (config.slen*20))
+        progress.config(value=(config.slen*20))
     else:
         config.loadval = progress["value"]
         progress.stop()
@@ -142,13 +144,13 @@ def uplist(tmp):
     config.loadval = 0
     loading()
     global index, value
-    index = config.kaja.curselection()
-    value = config.kaja.get(index)
+    index = config.songList.curselection()
+    value = config.songList.get(index)
     config.tmp = index[0]
     main()
     config.i = 0
     play(0, config.sound_file)
-    config.root1.destroy()
+    config.songListWindow.destroy()
     BtPlay.config(state="normal")
 
 
@@ -156,23 +158,25 @@ def list():
     BtPlay.config(state="disabled")
     if config.playing == 1:
         config.sound_file.pause()
+        progress.stop()
         refresh(1)
     config.playing = 0
     tmp = 1
-    config.root1 = Tk()
+    config.songListWindow = Tk()
+    config.songListWindow.title("Song List")
     myFont = font.Font(size=16)
-    config.kaja = Listbox(config.root1, font=myFont)
-    config.root1.geometry("300x500")
+    config.songList = Listbox(config.songListWindow, font=myFont)
+    config.songListWindow.geometry("300x500")
 
     for i in config.song:
         if len(i) > 30:
             i = i[:20] + "..."
-        config.kaja.insert(tmp, "  "+i)
+        config.songList.insert(tmp, "  "+i)
         tmp += 1
 
-    config.kaja.place(relx=0.5, rely=0.5, anchor="c", height="500", width="300")
-    config.kaja.bind('<<ListboxSelect>>', uplist)
-    config.root1.mainloop()
+    config.songList.place(relx=0.5, rely=0.5, anchor="c", height="500", width="300")
+    config.songList.bind('<<ListboxSelect>>', uplist)
+    config.songListWindow.mainloop()
 
 
 def again():
@@ -189,7 +193,7 @@ root = Tk()
 myFont = font.Font(size=16)
 root.title("Medusa")
 root.geometry("420x500")
-icon = PhotoImage(file = 'assets/icon.png')
+icon = PhotoImage(file='assets/icon.png')
 root.iconphoto(False, icon)
 playimg = PhotoImage(file="assets/play.png")
 forward = PhotoImage(file="assets/forward.png")
@@ -203,12 +207,12 @@ img = ImageTk.PhotoImage(Image.open("temp.jpg"))
 lpic = Label(root, image=img)
 s = ttk.Style()
 s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
-progress = ttk.Progressbar(root, style="red.Horizontal.TProgressbar", orient = HORIZONTAL, length = 400, maximum = (config.slen*20), mode = 'determinate', value=0)
-BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i,config.sound_file))
+progress = ttk.Progressbar(root, style="red.Horizontal.TProgressbar", orient='horizontal', length=400, maximum=(config.slen*20), mode='determinate', value=0)
+BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i, config.sound_file))
 BtNext = Button(root, border='0', image=forward, command=lambda: next(config.sound_file))
 BtPrev = Button(root, border='0', image=back, command=lambda: prev(config.sound_file))
-BtTrev = Button(root, border='0', image=search ,command= lambda: list())
-BtRef = Button(root, border='0', image=ref, command= lambda: again())
+BtTrev = Button(root, border='0', image=search, command=lambda: list())
+BtRef = Button(root, border='0', image=ref, command=lambda: again())
 cname = Label(root, text=config.mname, font=myFont)
 lpic.place(relx=0.5, rely=0.0, anchor="n")
 cname.place(relx=0.5, rely=0.65, anchor="c")
