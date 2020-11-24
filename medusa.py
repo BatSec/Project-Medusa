@@ -10,9 +10,9 @@ from PIL import Image, ImageTk
 
 username = os.getlogin()
 config.i = 0
-config.mname = ''
+config.songName = ''
 config.song = []
-config.slen = 0
+config.songLength = 0
 config.tmp = 0
 config.playing = 0
 config.path = "/home/"+username+"/Music/"
@@ -34,9 +34,9 @@ def main():
     config.sound_file = vlc.MediaPlayer(config.path + config.csong)
     temp_track = TinyTag.get(config.path + config.csong, image=True)
     if temp_track.duration is not None:
-        config.slen = int(temp_track.duration)
+        config.songLength = int(temp_track.duration)
     else:
-        config.slen = 0
+        config.songLength = 0
     title = temp_track.title
     if title is None:
         title = config.song[config.tmp]
@@ -49,7 +49,7 @@ def main():
         f1.write(pic)
     else:
         shutil.copy("assets/default.jpg", "temp.jpg")
-    config.mname = title
+    config.songName = title
 
 
 def play(check, sound_file):
@@ -58,7 +58,7 @@ def play(check, sound_file):
         config.i = 1
         config.playing = 1
         config.isload = 0
-        val = config.slen*1000
+        val = config.songLength*1000
         BtPlay.after(val, songEnd)
     else:
         config.sound_file.pause()
@@ -104,7 +104,7 @@ def refresh(var):
     img.save("temp.jpg")
     img = ImageTk.PhotoImage(Image.open("temp.jpg"))
     lpic.config(image=img)
-    cname.config(text=config.mname)
+    cname.config(text=config.songName)
     if var == 1:
         playimg = PhotoImage(file="assets/play.png")
         BtPlay.config(image=playimg)
@@ -123,16 +123,16 @@ def songEnd():
 
 def loading():
     if config.isload == 0:
-        i = 0
-        for i in range(0, config.slen):
+        for i in range(0, config.songLength):
             progress.config(value=config.loadval)
             progress.start()
+        i = 0
     elif config.isload == 2:
         progress.stop()
         progress.config(value=0)
     elif config.isload == 3:
         progress.stop()
-        progress.config(value=(config.slen*20))
+        progress.config(value=(config.songLength*20))
     else:
         config.loadval = progress["value"]
         progress.stop()
@@ -207,13 +207,13 @@ img = ImageTk.PhotoImage(Image.open("temp.jpg"))
 lpic = Label(root, image=img)
 s = ttk.Style()
 s.configure("red.Horizontal.TProgressbar", foreground='red', background='red')
-progress = ttk.Progressbar(root, style="red.Horizontal.TProgressbar", orient='horizontal', length=400, maximum=(config.slen*20), mode='determinate', value=0)
+progress = ttk.Progressbar(root, style="red.Horizontal.TProgressbar", orient='horizontal', length=400, maximum=(config.songLength*20), mode='determinate', value=0)
 BtPlay = Button(root, border='0', image=playimg, command=lambda: play(config.i, config.sound_file))
 BtNext = Button(root, border='0', image=forward, command=lambda: next(config.sound_file))
 BtPrev = Button(root, border='0', image=back, command=lambda: prev(config.sound_file))
 BtTrev = Button(root, border='0', image=search, command=lambda: list())
 BtRef = Button(root, border='0', image=ref, command=lambda: again())
-cname = Label(root, text=config.mname, font=myFont)
+cname = Label(root, text=config.songName, font=myFont)
 lpic.place(relx=0.5, rely=0.0, anchor="n")
 cname.place(relx=0.5, rely=0.65, anchor="c")
 BtPlay.place(relx=0.5, rely=0.85, anchor="c")
