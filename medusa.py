@@ -126,7 +126,6 @@ def loading():
         for i in range(0, config.songLength):
             progress.config(value=config.loadval)
             progress.start()
-        i = 0
     elif config.isload == 2:
         progress.stop()
         progress.config(value=0)
