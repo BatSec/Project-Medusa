@@ -8,6 +8,9 @@ import tkinter.font as font
 from tinytag import TinyTag
 from PIL import Image, ImageTk
 
+# os.environ["VLC_PLUGIN_PATH"] = "plugins/"
+# os.chdir(sys._MEIPASS)
+
 username = os.getlogin()
 config.i = 0
 config.songName = ''
@@ -22,7 +25,8 @@ config.loadval = 0
 
 for root, dirs, files, in os.walk(config.path):
     for name in files:
-        config.song.append(name)
+        if name.endswith(".mp3"):
+            config.song.append(name)
 
 
 def main():
