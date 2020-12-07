@@ -168,7 +168,7 @@ def list():
     config.songList = Listbox(root, font=myFont)
     for i in config.song:
         if len(i) > 30:
-            i = i[:20] + "..."
+            i = i[:30] + "..."
         config.songList.insert(tmp, "  "+i)
         tmp += 1
     config.songList.place(relx=0.5, rely=0.5, anchor="c", height="500", width="420")
