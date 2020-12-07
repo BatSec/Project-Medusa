@@ -153,33 +153,26 @@ def uplist(tmp):
     main()
     config.i = 0
     play(0, config.sound_file)
-    config.songListWindow.destroy()
+    config.songList.destroy()
     BtPlay.config(state="normal")
 
 
 def list():
-    BtPlay.config(state="disabled")
     if config.playing == 1:
         config.sound_file.pause()
         progress.stop()
         refresh(1)
     config.playing = 0
     tmp = 1
-    config.songListWindow = Tk()
-    config.songListWindow.title("Song List")
     myFont = font.Font(size=16)
-    config.songList = Listbox(config.songListWindow, font=myFont)
-    config.songListWindow.geometry("300x500")
-
+    config.songList = Listbox(root, font=myFont)
     for i in config.song:
         if len(i) > 30:
             i = i[:20] + "..."
         config.songList.insert(tmp, "  "+i)
         tmp += 1
-
-    config.songList.place(relx=0.5, rely=0.5, anchor="c", height="500", width="300")
+    config.songList.place(relx=0.5, rely=0.5, anchor="c", height="500", width="420")
     config.songList.bind('<<ListboxSelect>>', uplist)
-    config.songListWindow.mainloop()
 
 
 def again():
