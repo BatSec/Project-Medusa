@@ -22,13 +22,18 @@ Please make sure all the following requirements are satisfied or else the progra
 Run the either of the following commands depending on you system configuration. This will install all the dependencies.
 
      sudo pip install -r requirements.txt
-     sudo pip3 install -r requirements.txt
      
 ## Configuaration
 To change the location of the music directory, edit the 18<sup>th</sup> line in medusa.py
 
 such as <br />
 config.path = "/music/directory/"
+
+## Create Executable from source-code
+To create an executable from the source-code, type the following command
+
+     sudo pip install pyinstaller
+     pyinstaller --add-data 'assets/*:assets' --add-data '/usr/lib/x86_64-linux-gnu/vlc/plugins/*:plugins' --onefile medusa.py --hidden-import='PIL._tkinter_finder'
 
 ## Issues
 Incase of any issues with the application, feel free to file an issue. I'll look into it ASAP.
