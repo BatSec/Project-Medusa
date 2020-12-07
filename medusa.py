@@ -2,7 +2,7 @@ import vlc
 import os
 import config
 import shutil
-from tkinter import PhotoImage, Listbox, Button, Tk, Label
+from tkinter import PhotoImage, Listbox, Button, Tk, Label, Entry
 import tkinter.ttk as ttk
 import tkinter.font as font
 from tinytag import TinyTag
@@ -11,14 +11,32 @@ from PIL import Image, ImageTk
 # os.environ["VLC_PLUGIN_PATH"] = "plugins/"
 # os.chdir(sys._MEIPASS)
 
-username = os.getlogin()
 config.i = 0
 config.songName = ''
 config.song = []
 config.songLength = 0
 config.tmp = 0
 config.playing = 0
-config.path = "/home/"+username+"/Music/"
+with open('.cache/defaultPath.txt', 'r+') as defaultPath:
+    config.path = defaultPath.readline()
+    if not config.path:
+        def closeWindow():
+            config.path = getPath.get()
+            defaultPath.write(config.path)
+            defaultPath.close()
+            root.destroy()
+        root = Tk()
+        root.title("Medusa")
+        root.geometry("300x150")
+        label1 = Label(root, text = "Enter the path to your Music directory:")
+        label1.pack(anchor = 'center')
+        label2 = Label(root, text = "( eg: /home/username/Music/)")
+        label2.pack(anchor = 'center')
+        getPath = Entry(root)
+        getPath.pack(anchor = 'center')
+        Submit = Button(root, text = "OK", command = closeWindow)
+        Submit.pack(anchor = 's')
+        root.mainloop()
 config.isload = 0
 config.loadval = 0
 
@@ -34,6 +52,17 @@ def main():
         config.csong = config.song[config.tmp]
     except IndexError:
         print("No songs Found!!")
+        open('.cache/defaultPath.txt', 'w').close()
+        root = Tk()
+        root.title("Medusa")
+        root.geometry("300x150")
+        label1 = Label(root, text = "No songs Found!!")
+        label1.pack(anchor = 'center')
+        label2 = Label(root, text = "Restart the software and Enter a valid path")
+        label2.pack(anchor = 'center')
+        button = Button(root, text = "Ok", command = exit)
+        button.pack(anchor = 'center')
+        root.mainloop()
         exit()
     config.sound_file = vlc.MediaPlayer(config.path + config.csong)
     temp_track = TinyTag.get(config.path + config.csong, image=True)
