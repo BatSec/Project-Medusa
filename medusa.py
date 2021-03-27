@@ -186,6 +186,11 @@ def uplist(tmp):
     BtPlay.config(state="normal")
 
 
+def goBack():
+    config.songList.destroy()
+    config.backButton.destroy()
+
+
 def list():
     if config.playing == 1:
         config.sound_file.pause()
@@ -202,6 +207,8 @@ def list():
         tmp += 1
     config.songList.place(relx=0.5, rely=0.5, anchor="c", height="500", width="420")
     config.songList.bind('<<ListboxSelect>>', uplist)
+    config.backButton = Button(root, border='0', image=goback, command=lambda: goBack())
+    config.backButton.place(relx=0.875, rely=0.9, anchor='c', height="50", width="50")
 
 
 def again():
@@ -225,6 +232,7 @@ forward = PhotoImage(file="assets/forward.png")
 back = PhotoImage(file="assets/back.png")
 search = PhotoImage(file="assets/search.png")
 ref = PhotoImage(file="assets/refresh.png")
+goback = PhotoImage(file="assets/goback.png")
 img = Image.open("temp.jpg")
 img = img.resize((300, 300), Image.ANTIALIAS)
 img.save("temp.jpg")
